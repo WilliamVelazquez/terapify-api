@@ -1,4 +1,4 @@
-# Appointments API - CREATE / READ / UPDATE / DELETE
+# Appointments API
 
 Terapify API developed with Express/NodeJs to CRUD appointments for the Psychologists.
 
