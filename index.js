@@ -8,6 +8,9 @@ const appointmentsApi = require('./routes/appointments');
 const notFoundHandler = require('./utils/middleware/notFoundHandler');
 const { logErrors, wrapErrors, errorHandler } = require('./utils/middleware/errorHandlers');
 
+// body parser
+app.use(express.json());
+
 // Routes
 appointmentsApi(app);
 

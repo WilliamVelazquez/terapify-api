@@ -76,13 +76,70 @@ function appointmentsApi(app) {
     '/',
     validationHandler(createAppointmentSchema),
     async function(req, res, next) {
-      const { body: appointment } = req;
+      const { body } = req;
+
+      // Converting the Date for testing with a String from Postman
+      const appointment = { 
+        ...body,
+        start_time: new Date(body.start_time),
+        end_time: new Date(body.end_time)
+      }
+
       try {
-        const createdAppointmentId = await appointmentsService.createAppointment({ appointment });
+        const createdAppointmentId = await appointmentsService.createAppointment(appointment);
 
         res.status(201).json({
           data: createdAppointmentId,
           message: 'appointment created'
+        });
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.put(
+    '/:appointmentId',
+    validationHandler(idSchema, 'params'),
+    validationHandler(updateAppointmentSchema),
+    async function(req, res, next) {
+      const { appointmentId } = req.params;
+      const { body } = req;
+
+      const appointment = { 
+        ...body,
+      }
+      if(appointment.start_time) appointment.start_time = new Date(body.start_time)
+      if(appointment.end_time) appointment.end_time = new Date(body.end_time)
+
+      try {
+        const updatedAppointmentId = await appointmentsService.updateAppointment({
+          appointmentId,
+          appointment
+        });
+
+        res.status(200).json({
+          data: updatedAppointmentId,
+          message: 'appointment updated'
+        });
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.delete(
+    '/:appointmentId',
+    validationHandler(idSchema, 'params'),
+    async function(req, res, next) {
+      const { appointmentId } = req.params;
+
+      try {
+        const deletedAppointedId = await appointmentsService.deleteAppointment(appointmentId);
+
+        res.status(200).json({
+          data: deletedAppointedId,
+          message: 'appointment deleted'
         });
       } catch (err) {
         next(err);

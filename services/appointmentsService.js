@@ -39,6 +39,26 @@ class AppointmentsService {
 		const appointment = await this.mongoDB.get(this.collection, appointmentId);
 		return appointment || {};
 	}
+
+	async createAppointment(appointment) {
+		// const createdAppointmentId = await Promise.resolve(AppointmentsServiceMock.createAppointment);
+		const createdAppointmentId = await this.mongoDB.create(this.collection, appointment);
+		return createdAppointmentId;
+	}
+
+	async updateAppointment({ appointmentId, appointment } = {}) {
+    const updatedAppointmentId = await this.mongoDB.update(
+      this.collection,
+      appointmentId,
+      appointment
+    );
+    return updatedAppointmentId;
+	}
+	
+	async deleteAppointment(appointmentId) {
+    const deletedAppointmentId = await this.mongoDB.delete(this.collection, appointmentId);
+    return deletedAppointmentId;
+	}
 }
 
 module.exports = AppointmentsService;
